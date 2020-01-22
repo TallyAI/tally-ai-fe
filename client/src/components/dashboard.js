@@ -9,6 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import WidgetDisplayList from "../components/WidgetSystem/WidgetDisplayList";
 import WidgetAdditionList from "../components/WidgetSystem/WidgetAdditionList";
 import Sidebar from "../components/WidgetSystem/Sidebar";
+import ToggleFavoriteButton from "../components/ToggleFavoriteButton";
 
 import { fetchWordsOverTime, fetchTopAndBottom, fetchAllData } from "../actions/";
 
@@ -53,9 +54,16 @@ function DashboardGrid(props) {
             {props.businessInfo.reviewCount}
           </div>
           <div>
+          <h3 style={{textAlign: "center"}}>{props.businessInfo.businessName}</h3><br/>
+          </div>
+          <div>
             Overall Rating<br/>
             {props.businessInfo.averageRating}
           </div>
+          <div>
+            <ToggleFavoriteButton business={props.businessInfo}/>
+          </div>
+
         </div>
         <WidgetDisplayList />
       </div>

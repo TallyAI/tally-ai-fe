@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: 'wrap',
         flexDirection: 'column',
         alignItems: 'center',
+        // justifyItems: 'center'
        
     },
     textField: {

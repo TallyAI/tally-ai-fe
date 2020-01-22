@@ -1,47 +1,37 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import EditAccount from "./editaccount"
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import { Link } from "react-router-dom";
 
-import { fetchEditAccount, addBusiness } from "../../actions/index"
+
+import { fetchEditAccount, addBusiness, setFavorites } from "../../actions/index"
 
 import { connect } from 'react-redux';
+import ToggleFavoriteButton from '../ToggleFavoriteButton';
 
-const params = {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    pagination: {
-        clickable: true,
-    },
-    scrollbar: {
-        el: '.swiper-scrollbar',
-        hide: false
-    },
-}
-
-  const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     card: {
+        display: 'flex',
+        flexDirection: 'column',
+        transitionDuration: '0.3s',
         width: "35%",
-        minWidth: 200,
-        minHeight: '100%'
+        height: "50%",
+        margin: 20,
+        padding: 20,
     },
-    paper: {
-      position: 'absolute',
-      width: 600,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-  }));
+}));
 
-  function Settings(props) {
+function Settings(props) {
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -66,11 +56,10 @@ const params = {
     //         props.history.push('/Login')
     //     }
     // }, [props.loggedUser]);
-  
-    return(
-        <>
-            <div className="settings-section" style={{ height: '100vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                <div className="icon-buttons" style={{ width: '25%', height: '80%', backgroundColor: '#BBDEFB', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center'}}>
+
+    return (
+        <div className="settings-section" style={{ height: '100vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+            <div className="icon-buttons" style={{ width: '25%', height: '80%', backgroundColor: '#BBDEFB', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center' }}>
                 <div onClick={handleOpenAccount} style={{ width: '100%', cursor: "pointer" }}><span class="iconify" data-icon="ic:baseline-account-box" data-inline="false" style={{ fontSize: "6rem", color: 'black' }} /><p style={{ fontSize: '2.2rem', color: 'black' }}>Edit Account</p></div>
                 <Modal
                     aria-labelledby="simple-modal-title"
@@ -80,29 +69,58 @@ const params = {
                     style={{ display: 'flex', justifyContent: 'center' }}
                 >
                     <div className={classes.paper}>
-                        <EditAccount loggedUser={props.loggedUser} loggedUserInfo={props.loggedUserInfo} fetchEditUserInformation={props.fetchEditUserInformation}/>
+                        <EditAccount loggedUser={props.loggedUser} loggedUserInfo={props.loggedUserInfo} fetchEditUserInformation={props.fetchEditUserInformation} />
                     </div>
                 </Modal>
-                </div>
-                <div className="favorites-section" style={{ width: '65%', height: '80%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center', border: "1px solid grey" }}>
-                <div style={{ display: 'flex', justifyContent: 'center', width: '75%', marginBottom: '50%' }}><h3>Favorites</h3></div>
-                </div>
             </div>
-        </>
+            <div className="favorites-section" style={{ overflow: 'scroll', width: '65%', height: '80%', display: 'flex', flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', border: "1px solid grey" }}>
+                {/* <div style={{ display: 'flex', justifyContent: 'center', width: '75%', marginBottom: '50%' }}><h3>Favorites</h3></div> */}
+
+                {
+                    props.favorites.map((favorite) => {
+                        return (
+                            <Card className={classes.card}>
+                                <CardActionArea>
+
+                                    <img style={{ objectFit: "cover", width: "20vw", height: "10vw" }} src={favorite.businessImg}></img>
+                                    <CardContent>
+                                        <Typography component="h3">{favorite.businessName}</Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                                <CardActions>
+                                    {/* <Button variant="contained" color="primary"> */}
+                                    <Button variant="contained" color="secondary"><Link style={{textDecoration:"none", color:"white"}} onClick={() => {
+                                        props.addBusiness(favorite);
+                                    }}
+                                        to="/dashboard">View</Link></Button>
+                                    {/* </Button> */}
+                                    <Button variant="contained" color="secondary" onClick={() => {
+                                        props.setFavorites(props.favorites.filter((fav) => !(fav === favorite)));
+                                    }}>Remove</Button>
+                                </CardActions>
+                            </Card>
+                        );
+                    })
+                }
+            </div>
+        </div>
     )
 
 }
+
+
 
 const mapStateToProps = state => {
     return {
         loggedUser: state.loggedUser,
         isFetching: state.isFetching,
         error: state.error,
-        loggedUserInfo: state.loggedUserInfo
+        loggedUserInfo: state.loggedUserInfo,
+        favorites: state.favorites.favorites
     };
 };
 
 export default connect(
     mapStateToProps,
-    { fetchEditAccount, addBusiness }
+    { fetchEditAccount, addBusiness, setFavorites }
 )(Settings)

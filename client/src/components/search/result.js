@@ -110,7 +110,18 @@ const Result = ({ data, setTentativeSelection, select, className }) => {
         >
           Select
         </button>
-        <ToggleFavoriteButton business={data} />
+        {/* // business: {
+//     // for DS API calls
+//     businessId: null,
+//     // for side bar
+//     businessName: null,
+//     businessImg: null,
+//     // for top-of-page info cards
+//     reviewCount: 0,
+//     averageRating: 0
+//   } */}
+
+        <ToggleFavoriteButton business={{businessId: data.id, businessName: data.name, businessImg: data.image_url, reviewCount: data.review_count, averageRating: data.rating}} />
       </div>
     </div>
   );

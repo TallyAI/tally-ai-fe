@@ -14,6 +14,10 @@ import {
   // Login
   FETCH_LOGIN_SUCCESS,
   FETCH_LOGIN_FAILURE,
+  // Edit Account
+  FETCH_EDITACCOUNT_START,
+  FETCH_EDITACCOUNT_SUCCESS,
+  FETCH_EDITACCOUNT_FAILURE,
   // Data for PhraseRank
   FETCH_WORDS_OVER_TIME_START,
   FETCH_WORDS_OVER_TIME_SUCCESS,
@@ -46,7 +50,38 @@ const initialState = {
   favorites: {
     isSetting: false,
     error: null,
-    favorites: []//array of businesses
+    favorites: [{
+      // for DS API calls
+      businessId: "19878f9d6s77237-asd",
+      // for side bar
+      businessName: "Example Business",
+      businessImg: "https://assets.entrepreneur.com/franchise/282553-cover-image-1564755271.jpeg?width=800",
+      // for top-of-page info cards
+      reviewCount: 0,
+      averageRating: 0,
+      changeInRating: ""
+    },
+    {
+      // for DS API calls
+      businessId: "19878f9d6s77237-asd",
+      // for side bar
+      businessName: "VERAMEAT",
+      businessImg: "https://www.shopkeep.com/wp-content/uploads/2016/07/retail-store_retail-business-plan-e1468443541681.jpg",
+      // for top-of-page info cards
+      reviewCount: 0,
+      averageRating: 0,
+      changeInRating: ""
+    },    {
+      // for DS API calls
+      businessId: "19878f9d6s77237-asd",
+      // for side bar
+      businessName: "Bicycles",
+      businessImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTshfmpFtjour-4iJgDPY7uZ0Ki3Kua13zPonqqdiSAu27YFsW48Q&s",
+      // for top-of-page info cards
+      reviewCount: 0,
+      averageRating: 0,
+      changeInRating: ""
+    }]//array of businesses
   },
 
   searchResults: {
@@ -240,6 +275,27 @@ function reducer(state = initialState, action) {
         loggedUser: action.payload
       }
     case FETCH_LOGIN_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload
+      }
+    
+    // Edit Account
+    case FETCH_EDITACCOUNT_START:
+      return {
+        ...state,
+        isFetching: true,
+        error: ""
+      }
+    case FETCH_EDITACCOUNT_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        error: "",
+        loggedUserInfo: action.payload
+      }
+    case FETCH_EDITACCOUNT_FAILURE:
       return {
         ...state,
         isFetching: false,
