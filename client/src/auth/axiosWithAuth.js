@@ -12,6 +12,7 @@ export const axiosWithAuth = () => {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `${token}`,
+            'X-Requested-With': 'XMLHttpRequest'
         }
     });
 };

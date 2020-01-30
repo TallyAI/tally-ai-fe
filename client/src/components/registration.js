@@ -55,8 +55,14 @@ function Registration(props) {
         if (!props.isFetching) {//don't let them submit again if the backend is already processing their registration request
             console.log(userCredentials);
 
+            const config = {
+                headers: {
+                    'X-Requested-With': XMLHttpRequest
+                }
+            };
+
             axios
-                .post(`https://cors-anywhere.herokuapp.com/http://tallyai.us-east-1.elasticbeanstalk.com/api/auth/register`, userCredentials)
+                .post(`https://cors-anywhere.herokuapp.com/http://tallyai.us-east-1.elasticbeanstalk.com/api/auth/register`, userCredentials, config)
                 .then(
                     res => {
                         console.log("Registered successfully", res);
